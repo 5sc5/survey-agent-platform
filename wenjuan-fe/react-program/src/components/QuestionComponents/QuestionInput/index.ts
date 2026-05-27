@@ -1,0 +1,16 @@
+/**
+ * @description 问卷 输入框
+ * @author 吴英杰
+ */
+import Component from './Component'
+import PropComponent from './PropComponent'
+import { QuestionInputDefaultProps } from './interface'
+export * from './interface'
+// Input组件配置
+export default {
+  title: '输入框',
+  type: 'questionInput', //要和后端统一好
+  Component, //画布显示组件
+  PropComponent, //修改属性
+  defaultProps: QuestionInputDefaultProps,
+}
