@@ -69,7 +69,45 @@ survey-agent-platform
 
 ## 本地启动
 
-### 1. 启动 Mock 后端
+### 方式一：一行命令启动完整项目
+
+第一次启动前，先分别安装三个子项目依赖：
+
+```bash
+cd wenjuan-mock
+npm install
+```
+
+```bash
+cd wenjuan-fe/react-program
+npm install
+```
+
+```bash
+cd wenjuan-client
+npm install
+```
+
+之后回到项目根目录，执行一行命令即可同时启动 Mock 后端、管理后台和问卷填写端：
+
+```bash
+cd D:\program
+npm run dev
+```
+
+启动后访问：
+
+```text
+Mock 服务：http://localhost:3001
+管理后台：http://localhost:8000
+填写端：http://localhost:3000
+```
+
+停止项目时，在终端按 `Ctrl + C`。
+
+### 方式二：分别启动
+
+#### 1. 启动 Mock 后端
 
 ```bash
 cd wenjuan-mock
@@ -83,7 +121,7 @@ Mock 服务地址：
 http://localhost:3001
 ```
 
-### 2. 启动管理后台
+#### 2. 启动管理后台
 
 ```bash
 cd wenjuan-fe/react-program
@@ -97,7 +135,7 @@ npm start
 http://localhost:8000
 ```
 
-### 3. 启动问卷填写端
+#### 3. 启动问卷填写端
 
 ```bash
 cd wenjuan-client
