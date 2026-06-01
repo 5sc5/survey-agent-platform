@@ -4,6 +4,7 @@ const path = require('path')
 const root = path.resolve(__dirname, '..')
 const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm'
 const nodeCmd = 'node'
+const adminUrl = 'http://localhost:8000'
 
 const services = [
   {
@@ -27,6 +28,7 @@ const services = [
 ]
 
 const children = []
+let openedAdmin = false
 
 function log(name, data, isError = false) {
   const lines = data.toString().split(/\r?\n/).filter(Boolean)
@@ -59,6 +61,43 @@ function startService(service) {
   })
 }
 
+function openUrl(url) {
+  const command =
+    process.platform === 'win32'
+      ? `start "" "${url}"`
+      : process.platform === 'darwin'
+        ? `open "${url}"`
+        : `xdg-open "${url}"`
+
+  spawn(command, {
+    shell: true,
+    stdio: 'ignore',
+    detached: true,
+  }).unref()
+}
+
+function waitForAdminAndOpen() {
+  const timer = setInterval(async () => {
+    if (openedAdmin) {
+      clearInterval(timer)
+      return
+    }
+
+    try {
+      const res = await fetch(adminUrl)
+      if (res.ok || res.status === 404) {
+        if (openedAdmin) return
+        openedAdmin = true
+        clearInterval(timer)
+        console.log(`Opening admin in browser: ${adminUrl}`)
+        openUrl(adminUrl)
+      }
+    } catch {
+      // Keep waiting until the dev server is ready.
+    }
+  }, 1000)
+}
+
 function stopAll() {
   console.log('\nStopping all services...')
   for (const child of children) {
@@ -79,3 +118,5 @@ console.log('Press Ctrl+C to stop all services.\n')
 for (const service of services) {
   startService(service)
 }
+
+waitForAdminAndOpen()
